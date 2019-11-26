@@ -45,7 +45,7 @@ public class AccountGenerator {
     //private Logger log;
 
     public static void main(String[] args) throws Exception {
-        new AccountGenerator().performTwitchTask("sfdf6946", "L542Bxtx5", "m.illeja.115+.QK4K.9.TFQ9M.414VX@gmail.com", "qazzaq");
+        new AccountGenerator().performTwitchTask("Tripler8347", "Q748Fsug0", "m.illeja.115+.QK4K.9.TFQ9M.414VX@gmail.com", "qazzaq");
 
         /*if (args.length == 5) {
             new AccountGenerator().performTask(args[0], args[1],
@@ -91,7 +91,7 @@ public class AccountGenerator {
         WebElement splashScreen2 = utilities.checkForElement(By.cssSelector("[data-test-selector=\"onboarding-modal-header__container\"]"),
                 10, IMPLICIT_WAIT_SECONDS, TimeUnit.SECONDS);
 
-        while ((splashScreen != null )
+        while ((splashScreen != null)
                 || (splashScreen2 != null)) {
             Thread.sleep(5000);
             System.out.println("Awaiting manual splash-screen completion");
@@ -136,7 +136,7 @@ public class AccountGenerator {
         js.executeScript("$.growl.notice({ title: 'Notice', message: 'your notice message goes here' });");
         js.executeScript("$.growl.warning({ title: 'Warning!', message: 'your warning message goes here' });");
 
-        js.executeScript("$(\":contains('RuneScape &c Old School')\").parent(\".prime-offer-notification tw-relative\").find(\".prime-claim-button prime-claim-button--vertical tw-block tw-full-width\").find(\"button\").click();");
+        js.executeScript("$(\":contains('RuneScape & Old School')\").parent(\".prime-offer-notification\").find(\".prime-claim-button\").find(\"button\").click();");
 
         WebElement here = utilities.checkForElement(By.cssSelector("[href=\"https://www.runescape.com/account/linked-accounts/twitch/redeem\"]"),
                 20, IMPLICIT_WAIT_SECONDS, TimeUnit.SECONDS);
@@ -146,9 +146,33 @@ public class AccountGenerator {
             utilities.openNewWindow("https://www.runescape.com/account/linked-accounts/twitch/redeem");
         }
 
-        WebElement yesLogin = utilities.checkForElement(By.cssSelector("[data-test=\"yes-log-in\"]"),
+            /*Thread.sleep(5000);
+            js.executeScript("$(\":contains('Authorize')\").parent(\".authorize_actions\").find(\".js-authorize\").find(\"button\").submit();");
+            System.out.println("Clicking Authorize");*/
+
+        /*class="button button--large js-authorize"*/
+
+
+        WebElement auth = utilities.checkForElement(By.cssSelector(".button .button--large .js-authorize"),
+                20, IMPLICIT_WAIT_SECONDS, TimeUnit.SECONDS);
+        if (auth != null) {
+            auth.click();
+            System.out.println("Clicked authorize");
+        } else {
+            System.out.println("Cant find authorize button");
+        }
+
+        WebElement redirect = utilities.checkForElement(By.cssSelector("[onclick=\"redirectPage()\"]"),
                 15, IMPLICIT_WAIT_SECONDS, TimeUnit.SECONDS);
+        if (redirect != null) {
+            redirect.click();
+        }
+
+        WebElement yesLogin = utilities.checkForElement(By.cssSelector("[data-test=\"yes-log-in\"]"),
+                10, IMPLICIT_WAIT_SECONDS, TimeUnit.SECONDS);
+
         String osrsLoginLink = null;
+
         if (yesLogin != null) {
             osrsLoginLink = yesLogin.getAttribute("href");
         }
@@ -158,57 +182,27 @@ public class AccountGenerator {
                 driver.get(osrsLoginLink);
             } while (driver.getPageSource().contains("could not be loaded"));
         } else {
-            WebElement auth = utilities.checkForElement(By.cssSelector("[class=\"button button--large js-authorize\"]"),
-                    20, IMPLICIT_WAIT_SECONDS, TimeUnit.SECONDS);
-
-            if (auth != null) {
-                //js.executeScript("document.getElementsByClassName(\"button button--large js-authorize\")[0].click();");
-                auth.submit();
-                System.out.println("Clicked authorize");
-            } else {
-                System.out.println("Cant find authorize button");
-            }
-
-            WebElement redirect = utilities.checkForElement(By.cssSelector("[onclick=\"redirectPage()\"]"),
+            WebElement linkButton = utilities.checkForElement(By.cssSelector("[class=\"a-social-button a-social-button--service-twitch\"]"),
                     15, IMPLICIT_WAIT_SECONDS, TimeUnit.SECONDS);
-            if (redirect != null) {
-                redirect.click();
-            }
+            if (linkButton != null) {
+                utilities.openNewWindow(linkButton.getAttribute("href"));
 
-            yesLogin = utilities.checkForElement(By.cssSelector("[data-test=\"yes-log-in\"]"),
-                    15, IMPLICIT_WAIT_SECONDS, TimeUnit.SECONDS);
-
-            if (yesLogin != null) {
-                osrsLoginLink = yesLogin.getAttribute("href");
-            }
-
-            if (osrsLoginLink != null && !osrsLoginLink.isEmpty()) {
-                do {
-                    driver.get(osrsLoginLink);
-                } while (driver.getPageSource().contains("could not be loaded"));
-            } else {
-                WebElement linkButton = utilities.checkForElement(By.cssSelector("[class=\"a-social-button a-social-button--service-twitch\"]"),
-                        15, IMPLICIT_WAIT_SECONDS, TimeUnit.SECONDS);
-                if (linkButton != null) {
-                    utilities.openNewWindow(linkButton.getAttribute("href"));
-
-                    WebElement authOther = utilities.checkForElement(By.cssSelector("[class=\"button button--large js-authorize\"]"),
-                            20, IMPLICIT_WAIT_SECONDS, TimeUnit.SECONDS);
+                WebElement authOther = utilities.checkForElement(By.cssSelector("[class=\"button button--large js-authorize\"]"),
+                        20, IMPLICIT_WAIT_SECONDS, TimeUnit.SECONDS);
 
 
-                    if (authOther != null) {
-                        //js.executeScript("document.getElementsByClassName(\"button button--large js-authorize\")[0].click();");
-                        authOther.click();
-                        System.out.println("Clicked authorize2");
+                if (authOther != null) {
+                    //js.executeScript("document.getElementsByClassName(\"button button--large js-authorize\")[0].click();");
+                    authOther.click();
+                    System.out.println("Clicked authorize2");
 
-                        WebElement redirect2 = utilities.checkForElement(By.cssSelector("[onclick=\"redirectPage()\"]"),
-                                10, IMPLICIT_WAIT_SECONDS, TimeUnit.SECONDS);
-                        if (redirect != null) {
-                            redirect2.click();
-                        }
-                    } else {
-                        System.out.println("Cant find authorize2 button");
+                    WebElement redirect2 = utilities.checkForElement(By.cssSelector("[onclick=\"redirectPage()\"]"),
+                            10, IMPLICIT_WAIT_SECONDS, TimeUnit.SECONDS);
+                    if (redirect != null) {
+                        redirect2.click();
                     }
+                } else {
+                    System.out.println("Cant find authorize2 button");
                 }
             }
         }
@@ -564,7 +558,7 @@ public class AccountGenerator {
      * @param createOnFail - true if the specified account should be created in the case that it does not exist; else, false
      */
     private void logIntoRunescape(String email, String password, boolean createOnFail) throws InterruptedException {
-        driver.get("https://www.runescape.com/account_settings.ws");
+        //driver.get("https://www.runescape.com/account_settings.ws");
 
         driver.findElement(By.id("login-username")).clear();
         driver.findElement(By.id("login-username")).sendKeys(email);
@@ -681,6 +675,8 @@ public class AccountGenerator {
 
         FirefoxProfile fp = new FirefoxProfile();
         FirefoxOptions fo = new FirefoxOptions();
+        fp.setPreference("browser.privatebrowsing.autostart", true);
+        fo.addPreference("browser.privatebrowsing.autostart", true);
         fp.setPreference("webdriver.load.strategy", "unstable");
         fo.addPreference("webdriver.load.strategy", "unstable");
         fo.setPageLoadStrategy(PageLoadStrategy.EAGER);
